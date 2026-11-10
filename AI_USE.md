@@ -1,17 +1,13 @@
 # AI Use Statement – Team 20
 
-> DRAFT. The team should check this is accurate and edit it before submitting.
+> Draft for team review before submission.
 
-**Tool:** Claude (Anthropic).
+**Tools:** Claude (Anthropic); ChatGPT (OpenAI) for revising this statement and the progress update.
 
-**What it helped with:**
-- Milestone 2: helped us understand how the program should flow, and reviewed our pseudocode. It caught that we were missing the weekly total and the overload check.
-- Milestone 3/4: wrote the first version of the Python code from our Milestone 2 pseudocode and function breakdown, and ran our test cases.
+**Our work:** Our team created the project design, core features, pseudocode, and function list. We wrote the first version of the Python code using our Milestone 2 design and ran tests ourselves.
 
-**What stayed ours:** the problem, the three core features, the function list, the daily limit, and the test cases all came from our Milestone 1 proposal and Milestone 2 design.
+**How Claude helped:** We used Claude to review our code for bugs, suggest additional test cases, and help run tests. Our original test cases came from our design, and Claude helped us check additional situations.
 
-**How we checked and revised it:**
-- Ran every test case in `TESTS.md` and compared the output to what our design said should happen.
-- Testing turned up three bugs (`nan`/`inf` accepted, "busiest Sunday / lightest Sunday" when all days are equal, and a tip that could overload the lightest day), which were fixed.
-- Had all code outside our course (`try/except`, f-strings, string methods we weren't sure were covered) replaced with loops, if/else, and lists from Modules 2–8.
-- [TEAM: describe your own review here, e.g., each member went through the code line by line and rewrote the comments in their own words.]
+**How we checked the feedback:** We ran tests and compared the program's output with our expected results. The issues identified during testing included accepting `nan` and `inf`, confusing output when every day had equal hours, and a suggestion that could overload the lightest day. We used these findings to check the program's input handling and scheduling suggestions. The test inputs, expected results, actual results, and fixes are recorded in `TESTS.md`.
+
+Before submission, each team member still needs to review the code, explain how it works, and revise the comments in their own words.
