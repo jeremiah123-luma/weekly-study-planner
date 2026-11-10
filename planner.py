@@ -6,8 +6,10 @@
 # then prints a plan with the weekly total, the busiest and lightest
 # days, a warning for any day over the daily limit, and a tip for
 # moving hours from the busiest day to the lightest one.
+#
+# AI Use Statement: see AI_USE.md in this folder.
 
-# The seven days, in the order the program asks about them.
+# The seven days, in the order the program asks about them (a list).
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 # Most hours we think is reasonable for one day. Kept in one spot so
@@ -15,30 +17,33 @@ DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 DAILY_LIMIT = 6
 
 
+def is_valid_hours(answer):
+    """Return True if `answer` is a number from 0 to 24, like "4" or "2.5".
+    Anything else (letters, a minus sign, blank) returns False."""
+    # Take out ONE decimal point, then every character left must be a digit.
+    # "2.5" -> "25" (ok), "-2" -> "-2" (has a minus, not ok), "abc" (not ok).
+    without_point = answer.replace(".", "", 1)
+    if not without_point.isdecimal():
+        return False
+    # It's a number now, so it's safe to turn it into a float.
+    # A day only has 24 hours, so anything bigger is a typo.
+    return float(answer) <= 24
+
+
 def get_daily_hours(day):
     """Ask how many hours of work the user has on `day`.
-    Keeps asking until the answer is a number 0 or higher, then returns it."""
-    while True:
-        answer = input(f"How many hours of work do you have on {day}? ").strip()
-        # float() crashes on text like "abc", so try/except catches that
-        # and lets us ask again instead of the program stopping.
-        try:
-            hours = float(answer)
-        except ValueError:
-            print("Please enter a number from 0 to 24.")
-            continue
-        # A number came in, but it has to fit in a real day.
-        # Writing it as "0 <= hours <= 24" also rejects tricky inputs like
-        # "inf" and "nan", which float() accepts but aren't real hours.
-        if 0 <= hours <= 24:
-            return hours
+    Keeps asking until the answer is valid, then returns it as a float."""
+    answer = input("How many hours of work do you have on " + day + "? ").strip()
+    while not is_valid_hours(answer):
         print("Please enter a number from 0 to 24.")
+        answer = input("How many hours of work do you have on " + day + "? ").strip()
+    return float(answer)
 
 
 def get_description(day):
     """Ask for a short description of the day's work.
     Returns "No work" if the user leaves it blank."""
-    description = input(f"What is the work on {day}? (press Enter to skip) ").strip()
+    description = input("What is the work on " + day + "? (press Enter to skip) ").strip()
     if description == "":
         return "No work"
     return description
@@ -83,7 +88,8 @@ def print_plan(days, hours, descriptions, limit):
     print()
     print("===== Your Weekly Plan =====")
     for i in range(len(days)):
-        line = f"{days[i]:<10} {format_hours(hours[i]):>5} hrs  {descriptions[i]}"
+        # ljust/rjust pad the text with spaces so the columns line up.
+        line = days[i].ljust(10) + format_hours(hours[i]).rjust(5) + " hrs  " + descriptions[i]
         if check_overload(hours[i], limit):
             line = line + "   <-- Warning: over the limit"
         print(line)
@@ -97,19 +103,33 @@ def print_plan(days, hours, descriptions, limit):
     busiest, lightest = find_busiest_and_lightest(days, hours)
     # .index() finds where a day sits in the list so we can grab its hours.
     busiest_hours = hours[days.index(busiest)]
-    print(f"Weekly total: {format_hours(total)} hours")
-    print(f"Busiest day:  {busiest} ({format_hours(busiest_hours)} hrs)")
-    print(f"Lightest day: {lightest} ({format_hours(hours[days.index(lightest)])} hrs)")
+    lightest_hours = hours[days.index(lightest)]
+    print("Weekly total: " + format_hours(total) + " hours")
+    if busiest_hours == lightest_hours:
+        # Every day is the same, so "busiest Sunday, lightest Sunday" would look odd.
+        print("Every day has the same workload (" + format_hours(busiest_hours) + " hrs).")
+    else:
+        print("Busiest day:  " + busiest + " (" + format_hours(busiest_hours) + " hrs)")
+        print("Lightest day: " + lightest + " (" + format_hours(lightest_hours) + " hrs)")
 
     if check_overload(busiest_hours, limit):
-        extra = busiest_hours - limit
-        print(f"Tip: try moving {format_hours(extra)} hour(s) from {busiest} to {lightest}.")
+        extra = busiest_hours - limit      # hours the busiest day is over by
+        room = limit - lightest_hours      # hours the lightest day can still take
+        if room <= 0:
+            # Every day is already at or over the limit, so there's nowhere to move work.
+            print("Tip: every day is at or over the limit. Try cutting or pushing back some work.")
+        else:
+            # Only suggest moving as much as the lightest day can hold,
+            # so the tip never pushes that day over the limit too.
+            move = min(extra, room)
+            print("Tip: try moving " + format_hours(move) + " hour(s) from " + busiest + " to " + lightest + ".")
 
 
 def main():
     """Run the program: collect each day's input, then print the plan."""
     print("Welcome to the Weekly Study Planner!")
-    print(f"Daily limit is set to {DAILY_LIMIT} hours.\n")
+    print("Daily limit is set to " + str(DAILY_LIMIT) + " hours.")
+    print()
     hours = []
     descriptions = []
     for day in DAYS:
@@ -118,6 +138,4 @@ def main():
     print_plan(DAYS, hours, descriptions, DAILY_LIMIT)
 
 
-# Only run main() when this file is run directly (not when tests import it).
-if __name__ == "__main__":
-    main()
+main()
