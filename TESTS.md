@@ -13,6 +13,6 @@ Run with `python3 planner.py`. Daily limit = 6 hours.
 | 7 | Edge (limit) | Sun 6, Mon 6, Tue 2, Wed 3, Thu 1, Fri 0, Sat 4 | Total 22. No warnings (6 = limit, not over). Busiest Sunday (first of the tie), lightest Friday. No tip. | Matches expected exactly. |
 
 **Bugs found while testing (and fixed):**
-- Our first version accepted `nan` and `inf` as hours, because Python's `float()` treats them as numbers. Fixed by checking the characters with string methods (Module 7) before converting.
+- Our first version accepted `nan` and `inf` as hours, because Python's `float()` treats them as numbers. Fixed by looping through each character and only allowing digits and one decimal point before converting.
 - When every day had the same hours, it printed "Busiest: Sunday, Lightest: Sunday" and suggested moving hours from Sunday to Sunday. Fixed by checking for that case first.
 - The tip could push the lightest day over the limit too (e.g., moving 6 hours onto a 5-hour day). Fixed by only suggesting as much as the lightest day can hold.

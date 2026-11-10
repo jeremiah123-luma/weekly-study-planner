@@ -20,12 +20,12 @@ python3 planner.py
 ## Course concepts used (all from Modules 2–8)
 
 - **Lists**: `DAYS`, `hours`, `descriptions`
-- **for loops**: go through the days to ask questions and print the plan
+- **for loops**: go through the days to ask questions and print the plan, and go through each character of an answer to check it
 - **while loop**: keeps asking until the hours entered are valid
-- **Decisions (if/else)**: input checks, overload warnings, empty-week and same-hours messages
-- **Functions**: 9 total
-- **String methods**: `strip`, `replace`, `isdecimal`, `ljust`, `rjust`
-- **Tuples**: `find_busiest_and_lightest` returns two days at once
+- **Decisions (if/elif/else)**: input checks, overload warnings, empty-week and same-hours messages
+- **Functions**: 9 total, each with a docstring
+- **Strings**: joining text with `+`, checking characters with `in`
+- **Built-ins**: `input`, `print`, `len`, `range`, `min`, `int`, `float`, `str`, list `append`
 
 ## Still to do (Milestone 4, due Nov 30)
 

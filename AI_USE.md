@@ -13,5 +13,5 @@
 **How we checked and revised it:**
 - Ran every test case in `TESTS.md` and compared the output to what our design said should happen.
 - Testing turned up three bugs (`nan`/`inf` accepted, "busiest Sunday / lightest Sunday" when all days are equal, and a tip that could overload the lightest day), which were fixed.
-- Swapped out code from outside our course (`try/except`) for string methods we learned in Module 7.
+- Had all code outside our course (`try/except`, f-strings, string methods we weren't sure were covered) replaced with loops, if/else, and lists from Modules 2–8.
 - [TEAM: describe your own review here, e.g., each member went through the code line by line and rewrote the comments in their own words.]
